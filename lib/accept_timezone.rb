@@ -1,1 +1,5 @@
-require 'accept_timezone/railtie' if defined?(Rails)
+require 'accept_timezone/railtie'
+require 'accept_timezone/middleware'
+
+module AcceptTimezone
+end
