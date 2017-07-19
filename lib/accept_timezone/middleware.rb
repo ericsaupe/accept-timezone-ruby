@@ -9,6 +9,8 @@ module AcceptTimezone
       timezone = env['HTTP_ACCEPT_TIMEZONE']
       if timezone.present? && ActiveSupport::TimeZone[timezone].present?
         Time.zone = ActiveSupport::TimeZone[timezone]
+      else
+        Time.zone = ActiveSupport::TimeZone[Rails.application.config.time_zone]
       end
       [status, headers, response]
     end
