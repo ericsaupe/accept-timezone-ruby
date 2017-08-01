@@ -1,18 +1,22 @@
 module AcceptTimezone
-  class Middleware
-    def initialize app
-      @app = app
+  module ApplicationController
+    extend ActiveSupport::Concern
+
+    # note: don't specify included or ClassMethods if unused
+
+    included do
+      before_action :set_timezone
     end
 
-    def call env
-      status, headers, response = @app.call(env)
-      timezone = env['HTTP_ACCEPT_TIMEZONE']
+    private
+
+    def set_timezone
+      timezone = request.headers.env['HTTP_ACCEPT_TIMEZONE']
       if timezone.present? && ActiveSupport::TimeZone[timezone].present?
         Time.zone = ActiveSupport::TimeZone[timezone]
       else
         Time.zone = ActiveSupport::TimeZone[Rails.application.config.time_zone]
       end
-      [status, headers, response]
     end
   end
 end
